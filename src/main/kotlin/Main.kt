@@ -5,14 +5,14 @@ fun <T>MutableList<T>.lastElm(): T {
 
 fun main() {
 
-    val ls: Queue<Char> = Queue<Char>(*("1+1÷2-1".toCharArray().toTypedArray()))
+    val ls: Queue<Char> = Queue<Char>(*("1*2/2".toCharArray().toTypedArray()))
 
     println("The queue is: $ls")
 
-    val infixNot = InfixNotation(ls)
+    val infixNot = InfixNotation().convert(ls)
     val result = infixNot.result
-    val solver = SolveInfix(result)
+    val solver = SolveInfix().solve(result)
 
     println("The infix notation is: $result")
-    println("The solved is: ${solver.solved}")
+    println("The solved is: ${solver}")
 }
