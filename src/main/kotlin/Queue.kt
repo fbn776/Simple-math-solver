@@ -21,6 +21,9 @@ class Queue<T>(vararg items: T) {
         return (data.size == 0)
     }
 
+    fun first(): T {
+        return data[0]
+    }
     override fun toString(): String {
         var ls = "["
         data.forEachIndexed { index, t ->

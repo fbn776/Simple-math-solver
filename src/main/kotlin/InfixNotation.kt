@@ -3,13 +3,14 @@
  * @property[hasDecimalError] Is true if the Queue passed has decimal errors
  * @property[hasOperatorError] Is true if the Queue passed has operator errors
  * @property[hasInvalidCharError] Is true if the queue has invalid characters
-*/
+ */
 interface InfixReturnType {
     val result: MutableList<String>
     var hasDecimalError: Boolean
     var hasOperatorError: Boolean
     var hasInvalidCharError: Boolean
 }
+
 /**
  * A queue to infix notation converter.
  * @property[operators] A string that contains the operators
@@ -25,38 +26,47 @@ class InfixNotation() {
         var hasDecimalError = false
         var hasOperatorError = false
         var hasInvalidCharError = false
-            while (!ls.isEmpty()) {
-                //Get the first element of the queue
-                val i = ls.pop()
+        var lastChar: Char = ls.first()
+        while (!ls.isEmpty()) {
+            //Get the first element of the queue
+            val i = ls.pop()
 
-                //If the current character is number or decimal point, add it to the last element of `result`;
-                if (i in "0123456789" || i == '.') {
-                    if (i == '.' && result.lastElm().last() == '.') {
-                        hasDecimalError = true
-                        break
-                    }
+            //If there's a lonely decimal point, raise error.
+            if (i == '.' && lastChar !in "0123456789") {
+                hasDecimalError = true
+                break
+            }
 
-                    //Concat the last string element of result with `i`;
-                    result.set(result.size - 1, result.lastElm() + i.toString())
-
-                } else if (i in operators) {
-                    //If its an operator, then add it to the result as a new string item;
-                    result.add(i.toString())
-                    //Then add a new empty string for the next queue elements;
-                    result.add("")
-                } else {
-                    //Invalid character error;
-                    hasInvalidCharError = true
+            //If the current character is number or decimal point, add it to the last element of `result`;
+            if (i in "0123456789" || i == '.') {
+                if (i == '.' && result.lastElm().last() == '.') {
+                    hasDecimalError = true
                     break
                 }
+
+                //Concat the last string element of result with `i`;
+                result.set(result.size - 1, result.lastElm() + i.toString())
+
+            } else if (i in operators) {
+                //If its an operator, then add it to the result as a new string item;
+                result.add(i.toString())
+                //Then add a new empty string for the next queue elements;
+                result.add("")
+            } else {
+                //Invalid character error;
+                hasInvalidCharError = true
+                break
             }
 
-            //If there's an empty string in the result, then it means operator error;
-            if ("" in result) {
-                hasOperatorError = true
-            }
+            lastChar = i
+        }
 
-        return object: InfixReturnType {
+        //If there's an empty string in the result, then it means operator error;
+        if ("" in result) {
+            hasOperatorError = true
+        }
+
+        return object : InfixReturnType {
             override val result: MutableList<String>
                 get() = result
             override var hasDecimalError: Boolean

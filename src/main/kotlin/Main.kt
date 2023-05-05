@@ -11,7 +11,7 @@ fun main() {
 
     val infixNot = InfixNotation().convert(ls)
     val result = infixNot.result
-    val solver = SolveInfix().solve(result)
+    var solver = SolveInfix().solve(result)
 
     println("The infix notation is: $result")
     println("The solved is: ${solver}")
